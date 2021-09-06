@@ -1,19 +1,13 @@
 #!/bin/bash
-
-echo "TrashGamingDE - Quick-Server-Setup (QSS)v0.1"
-echo "This script needs to be executed as root! (It is not yet configured to be run otherwise.)"
-echo "This setup-programm was created for one specific case! Please mind, that it might not install everything you need or even to much."
-echo "Additionally: This script currently only works properly on Debian!"
-echo "It is possible, that a configurable setup-process will be used in the future."
-echo "Are you ready? [y/n]"
-read Ready
-if :
-do
-  case $Ready in
-    n)
+QSS()
+{
+  echo "Are you ready? [y/n]"
+  read Ready
+  if [ $Ready = "n" ]
+  then
     exit 0
-    ;;
-    y)
+  elif [ $Ready = "y" ]
+  then
     echo "We will now start the installation process..."
     echo "upgrading packages"
     apt update
@@ -45,36 +39,48 @@ do
     chmod -R 0755 phpmyadmin
     echo "# phpMyAdmin Apache configuration
 
-Alias /phpmyadmin /usr/share/phpmyadmin
+  Alias /phpmyadmin /usr/share/phpmyadmin
 
-<Directory /usr/share/phpmyadmin>
-    Options SymLinksIfOwnerMatch
-    DirectoryIndex index.php
-</Directory>
+  <Directory /usr/share/phpmyadmin>
+      Options SymLinksIfOwnerMatch
+      DirectoryIndex index.php
+  </Directory>
 
-# Disallow web access to directories that don't need it
-<Directory /usr/share/phpmyadmin/templates>
-    Require all denied
-</Directory>
-<Directory /usr/share/phpmyadmin/libraries>
-    Require all denied
-</Directory>
-<Directory /usr/share/phpmyadmin/setup/lib>
-    Require all denied
-</Directory>" > /etc/apache2/conf-available/phpmyadmin.conf
-  echo "activating phpmyadmin and reloading apache2 deamon"
-  a2enconf phpmyadmin
-  systemctl reload apache2
-  mkdir /usr/share/phpmyadmin/tmp/
-  chown -R www-data:www-data /usr/share/phpmyadmin/tmp/
-  echo "creating secondary user for MariaDB"
-  echo "enter username: "
-  read user_name
-  echo "enter userpassword: "
-  read user_password
-  mysql -e "CREATE USER '${user_name}'@'localhost' IDENTIFIED BY '${user_password}'"
-  mysql -e "GRANT ALL PRIVILEGES ON *.* TO '${user_name}'@'localhost' WITH GRANT OPTION"
-  echo "Setup completed"
-  exit 0
-  esac
-fi
+  # Disallow web access to directories that don't need it
+  <Directory /usr/share/phpmyadmin/templates>
+      Require all denied
+  </Directory>
+  <Directory /usr/share/phpmyadmin/libraries>
+      Require all denied
+  </Directory>
+  <Directory /usr/share/phpmyadmin/setup/lib>
+      Require all denied
+  </Directory>" > /etc/apache2/conf-available/phpmyadmin.conf
+    echo "activating phpmyadmin and reloading apache2 deamon"
+    a2enconf phpmyadmin
+    systemctl reload apache2
+    mkdir /usr/share/phpmyadmin/tmp/
+    chown -R www-data:www-data /usr/share/phpmyadmin/tmp/
+    echo "creating secondary user for MariaDB"
+    echo "enter username: "
+    read user_name
+    echo "enter userpassword: "
+    read user_password
+    mysql -e "CREATE USER '${user_name}'@'localhost' IDENTIFIED BY '${user_password}'"
+    mysql -e "GRANT ALL PRIVILEGES ON *.* TO '${user_name}'@'localhost' WITH GRANT OPTION"
+    echo "Setup completed"
+    exit 0
+    esac
+  else
+    echo "Try again!"
+    QSS
+  fi
+}
+
+
+echo "TrashGamingDE - Quick-Server-Setup (QSS)v0.1"
+echo "This script needs to be executed as root! (It is not yet configured to be executed otherwise.)"
+echo "This setup-programm was created for one specific case! Please mind, that it might not install everything you need or even to much."
+echo "Additionally: This script currently only works properly on Debian!"
+echo "It is possible, that a configurable setup-process will be used in the future."
+QSS
