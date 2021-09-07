@@ -107,6 +107,51 @@ QSS()
   fi
 }
 
+### Ask for Additions
+
+Request_Additions()
+{
+  echo "Should any additional programms be installed [y/n]"
+  read yn_additions
+  if [ $yn_additions = "n" ]
+  then
+    exit 0
+  elif [ $yn_additions = "y" ]
+  then
+    echo "Commencing installation. To see which programms are available look at: "
+    echo https://github.com/TrashGaming-de/FastSetUp
+    echo "So which additional program should be installed first?: "
+    read addition
+    echo "Searching for ${addition}"
+    Which_Addition
+    while [ $addition != "" ]
+    do
+      echo "Which program should be installed next? (leave empty to exit)"
+      read addition
+      if [ $addition != "" ]
+      then
+        echo "Searching for ${addition}"
+        Which_Addition
+      else
+        echo "left empty beginning exit"
+      fi
+    done
+  fi
+}
+
+### Check which Additional program should be installed
+
+Which_Addition
+{
+  if [ $addition = "Nextcloud" ]
+  then
+    bash ./Additions/Add_Nextcloud.sh
+  else
+    echo "Unknown program, returning to the begin..."
+    Request_Additions
+  fi
+}
+
 ### Main script starts here
 
 echo "TrashGamingDE - Quick-Server-Setup (QSS)v0.1"
@@ -115,3 +160,5 @@ echo "This setup-programm was created for one specific case! Please mind, that i
 echo "Additionally: This script currently only works properly on Debian!"
 echo "It is possible, that a configurable setup-process will be used in the future."
 QSS
+Request_Additions
+exit 0
