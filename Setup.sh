@@ -154,6 +154,7 @@ Which_Addition
 
 ### Main script starts here
 
+cd
 echo "TrashGamingDE - Quick-Server-Setup (QSS)v0.1"
 echo "This script needs to be executed as root! (It is not yet configured to be executed otherwise.)"
 echo "This setup-programm was created for one specific case! Please mind, that it might not install everything you need or even to much."
