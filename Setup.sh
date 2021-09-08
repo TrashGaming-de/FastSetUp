@@ -82,31 +82,6 @@ Alias /phpmyadmin /usr/share/phpmyadmin
   chown -R www-data:www-data /usr/share/phpmyadmin/tmp/
 }
 
-### This is the main function
-
-QSS()
-{
-  echo "Are you ready? [y/n]"
-  read Ready
-  if [ $Ready = "n" ]
-  then
-    exit 0
-  elif [ $Ready = "y" ]
-  then
-    echo "We will now start the installation process..."
-    apt_upgrade
-    apache2_PHP8_installation
-    MariaDB_installation
-    phpMyAdmin_installation
-    echo "Setup completed"
-    exit 0
-    esac
-  else
-    echo "Try again!"
-    QSS
-  fi
-}
-
 ### Ask for Additions
 
 Request_Additions()
@@ -149,6 +124,31 @@ Which_Addition
   else
     echo "Unknown program, returning to the begin..."
     Request_Additions
+  fi
+}
+
+### This is the main function
+
+QSS()
+{
+  echo "Are you ready? [y/n]"
+  read Ready
+  if [ $Ready = "n" ]
+  then
+    exit 0
+  elif [ $Ready = "y" ]
+  then
+    echo "We will now start the installation process..."
+    apt_upgrade
+    apache2_PHP8_installation
+    MariaDB_installation
+    phpMyAdmin_installation
+    echo "Setup completed"
+    exit 0
+    esac
+  else
+    echo "Try again!"
+    QSS
   fi
 }
 
