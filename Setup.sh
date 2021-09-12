@@ -118,9 +118,12 @@ Request_Additions()
 
 Which_Addition
 {
-  if [ $addition = "Nextcloud" ]
+  if [ ${addition} = "Nextcloud" ]
   then
     bash ./Additions/Add_Nextcloud.sh
+  elif [ ${addition} = "Minecraft" ]
+  then
+    bash ./Additions/Add_MinecraftServer.sh
   else
     echo "Unknown program, returning to the begin..."
     Request_Additions

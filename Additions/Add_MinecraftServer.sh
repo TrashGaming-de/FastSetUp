@@ -32,9 +32,8 @@ dwnld_minecraft()
     echo "screen -r minecraft -X quit" > stop.sh
   else
     echo "Not readable Minecraft Edit"
+    dwnld_minecraft
   fi
-  chmod +x start.sh stop.sh
-  echo "eula = true" > eula.txt
 }
 
 ### Main script
@@ -55,6 +54,8 @@ adduser --disabled-login minecraft
 su minecraft
 cd
 dwnld_minecraft
+chmod +x start.sh stop.sh
+echo "eula = true" > eula.txt
 echo "starting minecraft"
 su minecraft
 ./start.sh
